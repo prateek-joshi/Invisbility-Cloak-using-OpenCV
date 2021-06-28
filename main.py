@@ -22,8 +22,12 @@ while cap.isOpened():
         mask = cv.inRange(hsv_frame, lower_blue, upper_blue)
         # cv.imshow('red_mask', mask)
 
+        # all things blue
         part1 = cv.bitwise_and(background,background,mask=mask)
-        cv.imshow("part1",part1)
+        mask = cv.bitwise_not(mask)
+        # all things not blue
+        part2 = cv.bitwise_and(frame,frame,mask=mask)
+        cv.imshow("part2",part1+part2)
 
         if cv.waitKey(1) & 0xFF==ord('q'):
             break
