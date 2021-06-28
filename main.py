@@ -12,21 +12,17 @@ while cap.isOpened():
         # convert rgb to hsv
         hsv_frame = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
         # lower: hue-10,100,100 ; higher: hue+10,255,255 for RED!!
-        blue = np.uint8([[[255,0,0]]])
-        hsv_blue = cv.cvtColor(blue, cv.COLOR_BGR2HSV) # [[[hue, saturation, value]]]
-        # print(hsv_red)
         lower_blue = np.array([110,50,50])
         upper_blue = np.array([130,255,255])
 
-        # check if given array lies between upper and lower bound (is the pixel red?)
-        mask = cv.inRange(hsv_frame, lower_blue, upper_blue)
-        # cv.imshow('red_mask', mask)
-
+        # check if given array lies between upper and lower bound (is the pixel blue?)
         # all things blue
+        mask = cv.inRange(hsv_frame, lower_blue, upper_blue)
         part1 = cv.bitwise_and(background,background,mask=mask)
-        mask = cv.bitwise_not(mask)
+
         # all things not blue
-        part2 = cv.bitwise_and(frame,frame,mask=mask)
+        not_mask = cv.bitwise_not(mask)
+        part2 = cv.bitwise_and(frame,frame,mask=not_mask)
         cv.imshow("part2",part1+part2)
 
         if cv.waitKey(1) & 0xFF==ord('q'):
